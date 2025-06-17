@@ -199,6 +199,38 @@ class RealBank {
         }
     }
 
+    public void transfer(){
+        loadToHash();
+        Scanner sct = new Scanner(System.in);
+        System.out.print("Enter your bank account number: ");
+        int aac = sct.nextInt();
+        if(map.get(aac) == null){
+            System.out.println("Sorry! No Account found");
+            return;
+        }
+        System.out.print("Enter beneficiary account number: ");
+        int bac = sct.nextInt();
+        if(map.get(bac) == null){
+            System.out.println("Sorry! No Account found");
+            return;
+        }
+        System.out.print("Enter amount to transfer: ");
+        int tbal = sct.nextInt();
+        int aacavbal = getBalance(aac);
+        if(aacavbal<tbal){
+            System.out.println("Sorry! transaction failed,insufficient balance");
+            return;
+        }else{
+            int aacnb=aacavbal-tbal;
+            int bacnb=getBalance(bac)+tbal;
+            updateBalance(aac,aacnb);
+            updateBalance(bac,bacnb);
+            System.out.printf("Amount %d successfully transfered from account %d to %d",tbal,aac,bac).println();
+            checkBalance(aac);
+        }
+
+    }
+
 
 
 }
@@ -206,15 +238,17 @@ class RealBank {
 
 class RealBankRunner{
     public static void main(String[] args){
-	    RealBank r1 = new RealBank();
-	    Scanner sc = new Scanner(System.in);
-        while(true){
+        RealBank r1 = new RealBank();
+        Scanner sc = new Scanner(System.in);
+
+      while(true){
           System.out.println("\n====== Welcome to RealBank ======");
           System.out.println("1. Open New Account");
           System.out.println("2. Check Balance");
           System.out.println("3. Deposit");
           System.out.println("4. Withdrawl");
-          System.out.println("5. Exit");
+          System.out.println("5. Transfer");
+          System.out.println("6. Exit");
           System.out.print("Choose an option: ");
 
           int ch = sc.nextInt();
@@ -232,6 +266,9 @@ class RealBankRunner{
                   r1.withdraw();
                   break;
               case 5:
+                  r1.transfer();
+                  break;
+              case 6:
                   System.out.println("Thankyou for banking with Real bank");
                   sc.close();
                   System.exit(0);
@@ -242,3 +279,4 @@ class RealBankRunner{
       }
     }
 }
+
